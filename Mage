@@ -1,0 +1,63 @@
+
+package Character;
+import Character.Character;
+/**
+ * 
+ * Mage class represents the "Mage" character wherein it has an ability to invokes fireball.
+ */
+public class Mage extends Character {
+
+    public int Mana;
+    int currentMana;
+    
+    /**
+     * 
+     * @param n stands for name
+     * @param s is strength
+     * @param d stands for durability
+     * @param a stands armor
+     * 
+     * The Mage's intelligence has a value of 25,
+     * While the Mana has a value of 20.
+     */
+    public Mage(String n, int s, int d, int a) {
+        super(n, a);
+        intelligence = 25;
+        this.Mana = 20;
+        this.currentMana = Mana;
+        this.intelligence = 25;
+    }
+
+    
+    /**
+     * 
+     * 
+     *It refers to the Mage's fireball. If the Mana is equal to 0 then 0 is returned. 
+     * If not then it returns a damage of a random number from 1-6 plus intelligence of the Mage.
+     * @return fireball
+     */
+    public int fireball() {
+        if(Mana == 0){
+            return 0;
+        }else{
+            Mana -= 10;
+        }
+        return dice.Roll() + intelligence;
+    }    
+     
+    /**
+     * 
+     * This returns the damage taken by the Mage with armor points.
+     * If the current life is less than or equal to 0, then the current life will be 0. (it is to avoid a result of a negative value.)
+     * Next, if the damage is less than or equal to 0, then the damage will be zero.
+     * @param damage z
+     */
+    @Override
+    public void wound(int damage) {
+        CurrentLife = (CurrentLife + armor)- damage;
+        if (CurrentLife <= 0) {
+            CurrentLife = 0;
+        }
+    }
+}
+   
