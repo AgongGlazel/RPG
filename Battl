@@ -1,0 +1,330 @@
+package Test;
+
+import Character.Thief;
+import Character.Mage;
+import Character.Knight;
+import Character.Character;
+import Utility.Dice;
+import java.util.Scanner;
+/**
+ * 
+ *This class allows the three characters to fight until one is left standing.
+ */
+public class BattleZ {
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        Dice dice = new Dice();
+
+        Character[] player;
+        player = new Character[3];
+        player[0] = new Mage("Lumina", 1, 1, 2);
+        player[1] = new Thief("Bantiloc", 1, 1, 3);
+        player[2] = new Knight("Dwight", 1, 1, 5);
+
+        for (int i = 1; player[0].getCurrentLife() >= 0 && player[1].getCurrentLife() >= 0 && player[2].getCurrentLife() >= 0; i++) {
+
+            System.out.println("Round: " + i);
+
+            System.out.println(player[0].getName() + ": " + player[0].getCurrentLife() + " Life");
+            System.out.println(player[1].getName() + ": " + player[1].getCurrentLife() + " Life");
+            System.out.println(player[2].getName() + ": " + player[2].getCurrentLife() + " Life");
+
+            if (player[0].getCurrentLife() > 0) {
+                //PLAYER[0]
+                System.out.println(player[0].getName() + " Attack " + player[1].getName() + "[1] or " + player[2].getName() + "[2]?");
+                int a1 = sc.nextInt();
+
+                switch (a1) {
+                    //player0 attacks player1
+                    case 1:
+                        player[1].wound(player[0].attack());
+                        System.out.println(player[0].getName() + " attacks " + player[1].getName() + " for " + (player[0].attack()));
+                        int p0 = dice.Roll();
+                        //player1 evades player0's attack
+                                int e = dice.Roll();
+                                switch (e) {
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                        if (((Thief) player[1]).Stamina > 0) {
+                                            player[1].wound(player[0].attack() - ((Thief) player[1]).evade());
+                                            System.out.println(player[1].getName() + " Evades!");
+                                            System.out.println("5 Stamina Points used. " + player[1].getName() + " has " + ((Thief) player[1]).Stamina + " left");
+                                            System.out.println(player[0].getName() + " attacks " + player[1].getName() + " for " + (player[0].attack() - ((Thief) player[1]).evade()));
+                                        } else {
+                                            System.out.println(player[1].getName() + " is out of Stamina");
+                                            break;
+                                        }
+                                    case 4:
+                                    case 5:
+                                    case 6:
+                                        if (((Thief) player[1]).Stamina > 0) {
+                                            break;
+                                        }
+                                }
+                        switch (p0) {
+                            //player0 invokes fireball
+                            case 1:
+                            case 2:
+                                if (((Mage) player[0]).Mana > 0) {
+                                    player[1].wound(((Mage) player[0]).fireball());
+                                    System.out.println(player[0].getName() + " Invokes Fireball!");
+                                    System.out.println("5 Mana deducted. " + ((Mage) player[0]).Mana + " left");
+                                    System.out.println("Fireball does " + ((Mage) player[0]).fireball() + " damage!");
+                                    //player1 evades player0's fireball
+                                                int e1 = dice.Roll();
+                                                switch (e1) {
+                                                    case 1:
+                                                    case 2:
+                                                    case 3:
+                                                        if (((Thief) player[1]).Stamina > 0) {
+                                                            player[1].wound(((Mage) player[0]).fireball() - ((Thief) player[1]).evade());
+                                                            System.out.println(player[1].getName() + " Evades!");
+                                                            System.out.println("5 Stamina Points used. " + player[1].getName() + " has " + ((Thief) player[1]).Stamina + " left");
+                                                            System.out.println(player[0].getName() + "'s fireball does " + (((Mage) player[0]).fireball() - ((Thief) player[1]).evade()) + " damage to " + player[1].getName());
+                                                            //player1 is out of stamina
+                                                        } else {
+                                                            System.out.println(player[1].getName() + " is out of Stamina");
+                                                            break;
+                                                        }
+                                                        //player1 does not evade
+                                                    case 4:
+                                                    case 5:
+                                                    case 6:
+                                                        if (((Thief) player[1]).Stamina > 0) {
+                                                            break;
+                                                        }
+                                                }
+                                    break;
+                                }
+                            //player0 is out of mana
+                            case 3:
+                            case 4:
+                                if (((Mage) player[0]).Mana <= 0) {
+                                    System.out.println(player[0].getName() + "'s mana ran out.");
+                                    break;
+                                }
+                            //player0 heals
+                            case 5:
+                            case 6:
+                                player[0].heal();
+                                System.out.println(player[0].getName() + " heals " + player[0].getheal() + " Life");
+                                break;
+                        }
+                        break;
+                    case 2:
+                        player[2].wound(player[0].attack());
+                        System.out.println(player[0].getName() + " attacks " + player[2].getName() + " for " + player[0].attack());
+                        //player2 blocks player0's attack
+                        int b1 = dice.Roll();
+                        if (((Knight) player[2]).Durability > 0) {
+                            switch (b1) {
+                                case 1:
+                                case 2:
+                                case 3:
+                                    ((Knight) player[2]).block(player[0].attack());
+                                    System.out.println(player[2].getName() + " Blocks! " +player[0].getName()+ " does 0 damage!");
+                                    System.out.println("10 Durability used. " + player[2].getName() + " has " + ((Knight) player[2]).Durability + " left");
+                                    //player2 is out of durability
+                                    if (((Knight) player[2]).Durability <= 0) {
+                                        System.out.println(player[2].getName() + " is out of Durability");
+                                        break;
+                                    }
+                                //player2 does not block
+                                case 4:
+                                case 5:
+                                case 6:
+                                    if (((Knight) player[2]).Durability > 0) {
+                                        break;
+                                    }
+                            }
+                        }
+                        int p3 = dice.Roll();
+                        switch (p3) {
+                            case 1:
+                            case 2:
+                                if (((Mage) player[0]).Mana > 0) {
+                                    player[2].wound(((Mage) player[0]).fireball());
+                                    System.out.println(player[0].getName() + " Uses Fireball!");
+                                    System.out.println("5 Mana Points used. You have " + ((Mage) player[0]).Mana + " left");
+                                    System.out.println("Fireball does " + ((Mage) player[0]).fireball() + " damage!");
+                                    //player2 blocks player1's fireball
+                                    int b = dice.Roll();
+                                    if (((Knight) player[2]).Durability > 0) {
+                                        switch (b) {
+                                            case 1:
+                                            case 2:
+                                            case 3:
+                                                ((Knight)player[2]).block(((Mage) player[0]).fireball());
+                                                System.out.println(player[2].getName() + " Blocks Fireball!");
+                                                System.out.println("10 Durabilty used. " + player[2].getName() + " has " + ((Knight) player[2]).Durability + " left");
+                                                if (((Knight) player[2]).Durability <= 0) {
+                                                    System.out.println(player[2].getName() + " is out of Durability");
+                                                    break;
+                                                }
+                                            //player2 does not block fireball
+                                            case 4:
+                                            case 5:
+                                            case 6:
+                                                if (((Knight) player[2]).Durability > 0) {
+                                                    break;
+                                                }
+                                        }
+                                    }
+                                }
+                            case 3:
+                            case 4:
+                                if (((Mage) player[0]).Mana <= 0) {
+                                    System.out.println(player[0].getName() + " is out of mana");
+                                    break;
+                                }
+                            case 5:
+                            case 6:
+                                player[0].heal();
+                                System.out.println(player[0].getName() + " heals " + player[0].getheal() + " Life");
+                                break;
+                        }
+                }
+            }
+            //PLAYER[1}
+            if (player[1].getCurrentLife() > 0) {
+                System.out.println(player[1].getName() + " Attack " + player[0].getName() + "[1] or " + player[2].getName() + "[2]?");
+                int a1 = sc.nextInt();
+                //player1 attacks player0
+                switch (a1) {
+                    case 1:
+                        player[0].wound(player[1].attack());
+                        System.out.println(player[1].getName() + " attacks " + player[0].getName() + " for " + player[1].attack());
+                        break;
+                    //player1 attacks player2
+                    case 2:
+                        player[2].wound(player[1].attack());
+                        System.out.println(player[1].getName() + " attacks " + player[2].getName() + " for " + player[1].attack());
+                        //player2 blocks player1's attack
+                        int b = dice.Roll();
+                        if (((Knight) player[2]).Durability > 0 && player[2].getCurrentLife() > 0) {
+                            switch (b) {
+                                case 1:
+                                case 2:
+                                case 3:
+                                    ((Knight)player[2]).block(player[1].attack());
+                                    System.out.println(player[2].getName() + " Blocks!");
+                                    System.out.println("10 Durabilty used. " + player[2].getName() + " has " + ((Knight) player[2]).Durability + " left");
+                                    //player2 is out of durability
+                                    if (((Knight) player[2]).Durability <= 0 && player[2].getCurrentLife() > 0) {
+                                        System.out.println(player[2].getName() + " is out of Durability");
+                                        break;
+                                    }
+                                    break;
+                                //player2 does not block
+                                case 4:
+                                case 5:
+                                case 6:
+                                    if (((Knight) player[2]).Durability > 0) {
+                                        break;
+                                    }
+                                    break;
+                            }
+                                break;
+                        }
+                        break;
+                }
+            }
+            int p0 = dice.Roll();
+            switch (p0) {
+                case 1:
+                case 2:
+                case 3:
+                    player[1].heal();
+                    System.out.println(player[1].getName() + " heals " + player[1].getheal() + " Life");
+                    break;
+                default:
+            }
+
+            //PLAYER[2}
+            if (player[2].getCurrentLife() > 0) {
+                System.out.println(player[2].getName() + " Attack Who? [1]" + player[0].getName() + " [2]" + player[1].getName());
+                int a3 = sc.nextInt();
+                //player2 attacks player0
+                switch (a3) {
+                    case 1:
+                        player[0].wound(player[2].attack());
+                        System.out.println(player[2].getName() + " attacks " + player[0].getName() + " for " + player[2].attack());
+                        break;
+                    //player2 attacks player1
+                    case 2:
+                        player[1].wound(player[2].attack());
+                        System.out.println(player[2].getName() + " attacks " + player[1].getName() + " for " + player[2].attack());
+                        //player1 evades player2's attack
+                                int e = dice.Roll();
+                                switch (e) {
+                                    case 1:
+                                    case 2:
+                                    case 3:
+                                        if (((Thief) player[1]).Stamina > 0) {
+                                            player[1].wound(player[2].attack() - ((Thief) player[1]).evade());
+                                            System.out.println(player[1].getName() + " Evades!");
+                                            System.out.println("5 Stamina Points used. " + player[1].getName() + " has " + ((Thief) player[1]).Stamina + " left");
+                                            System.out.println(player[2].getName() + " attacks " + player[1].getName() + " for " + (player[2].attack() - ((Thief) player[1]).evade()));
+                                            //player1 is out of stamina
+                                        } else {
+                                            System.out.println(player[1].getName() + " is out of Stamina");
+                                            break;
+                                        }
+                                        //player2 does not evade
+                                    case 4:
+                                    case 5:
+                                    case 6:
+                                        if (((Thief) player[1]).Stamina > 0) {
+                                            break;
+                                        }
+                                }
+                }
+                //player 2 heals
+                int p1 = dice.Roll();
+                switch (p1) {
+                    case 1:
+                    case 2:
+                    case 3:
+                        player[1].heal();
+                        System.out.println(player[2].getName() + " heals " + player[2].getheal() + " Life");
+                }
+            }
+
+            System.out.println("*************************");
+
+            if (player[0].getCurrentLife() <= 0 && player[1].getCurrentLife() <= 0 && player[2].getCurrentLife() <= 0) {
+                System.out.println(player[0].getName() + ": " + player[0].getCurrentLife() + " Life");
+                System.out.println(player[1].getName() + ": " + player[1].getCurrentLife() + " Life");
+                System.out.println(player[2].getName() + ": " + player[2].getCurrentLife() + " Life");
+                System.out.println("IT'S A DRAW!");
+                System.out.println("*************************");
+                break;
+            } else if (player[1].getCurrentLife() <= 0 && player[2].getCurrentLife() <= 0) {
+                System.out.println(player[0].getName() + ": " + player[0].getCurrentLife() + " Life");
+                System.out.println(player[1].getName() + ": " + player[1].getCurrentLife() + " Life");
+                System.out.println(player[2].getName() + ": " + player[2].getCurrentLife() + " Life");
+                System.out.println(player[0].getName() + " wins!");
+                System.out.println("*************************");
+                break;
+            } else if (player[0].getCurrentLife() <= 0 && player[2].getCurrentLife() <= 0) {
+                System.out.println(player[0].getName() + ": " + player[0].getCurrentLife() + " Life");
+                System.out.println(player[1].getName() + ": " + player[1].getCurrentLife() + " Life");
+                System.out.println(player[2].getName() + ": " + player[2].getCurrentLife() + " Life");
+                System.out.println(player[1].getName() + " wins!");
+                System.out.println("*************************");
+                break;
+            } else if (player[0].getCurrentLife() <= 0 && player[1].getCurrentLife() <= 0) {
+                System.out.println(player[0].getName() + ": " + player[0].getCurrentLife() + " Life");
+                System.out.println(player[1].getName() + ": " + player[1].getCurrentLife() + " Life");
+                System.out.println(player[2].getName() + ": " + player[2].getCurrentLife() + " Life");
+                System.out.println(player[2].getName() + " wins!");
+                System.out.println("*************************");
+                break;
+            }
+
+        }
+    }
+}
