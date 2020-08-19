@@ -1,0 +1,62 @@
+package Character;
+
+import Character.Character;
+/**
+ * 
+ * Knight class represents the "Knight" character wherein it has an ability to block its opponent's attack.
+ */
+public class Knight extends Character{
+      
+    public int Durability = 20;
+    public int currentDurability;
+    /**
+     * 
+     * @param n stands for name
+     * @param d stands for durability
+     * @param i stands intelligence
+     * @param a stands armor
+     * 
+     * The Knight's strength has a value of 25
+     * While its durability has a value of 20.
+     */
+    public Knight(String n,int d, int i, int a){
+        super(n,a);
+        strength = 25;
+        this.Durability = 20;
+        this.currentDurability = Durability;
+    }
+   
+    /**
+     * 
+     * 
+     *It refers to the Knight's damage. If the durability is equal to 0 then 0 is returned. 
+     * If not then it returns opponent's damage minus its own damage.
+     * @param damage z
+     * @return block
+     */
+    public int block(int damage){
+        if(Durability == 0){
+            return 0;
+        }else{
+            Durability -= 10;
+        }
+        return damage -= damage;
+    }
+    
+    /**
+     * 
+     * This returns the damage taken by the Knight with armor points.
+     * If the current life is less than or equal to 0, then the current life will be 0. (it is to avoid a result of a negative value.)
+     * Next, if the damage is less than or equal to 0, then the damage will be zero.
+     * @param damage z
+     */
+    @Override
+     public void wound(int damage) {
+        CurrentLife = (CurrentLife + armor) - damage;
+        if (CurrentLife <= 0) {
+            CurrentLife = 0;
+        }
+    }
+    
+    
+}
