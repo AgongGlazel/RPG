@@ -1,0 +1,65 @@
+
+package Character;
+
+/**
+ * 
+ * Thief class represents the "Thief" character wherein it has a tricky skill called as "evade". 
+ * It can make a sudden movement to avoid its opponent's attack.
+ */
+public class Thief extends Character {
+
+    public int Stamina;
+    int currentStamina;
+
+    /**
+     * 
+     * @param n stands for name
+     * @param s stands for stamina
+     * @param i stands for intelligence
+     * @param a stands for armor
+     * 
+     * The dexterity of this character has a value of 25
+     * While the stamina/endurance has a value of 20
+     */
+    public Thief(String n, int s, int i, int a) {
+        super(n, a);
+        dexterity = 25;
+        this.Stamina = 20;
+        this.currentStamina = Stamina;
+        this.dexterity = 25;
+    }
+    /**
+     * 
+     *If the Thief's stamina is 0, then he will not evade.
+     * However if it still has stamina then its current stamina will be subtracted by 5.
+     * The dexterity which is 25 will be added on the dice roll (1-6) randomly.
+     * @return evade
+     */
+    public int evade() {
+        if(Stamina == 0){
+            return 0;
+        }else{
+            Stamina -= 5;
+        }
+        return dice.Roll() + dexterity;
+    }
+    
+    /**
+     * 
+     * 
+     * This returns the damage taken by the Thief with armor points.
+     * If the current life is less than or equal to 0, then the current life will be 0. (it is to avoid a result of a negative value.)
+     * Next, if the damage is less than or equal to 0, then the damage will be zero.
+     * @param damage z
+     */
+    
+    @Override
+    public void wound(int damage) {
+        CurrentLife = (CurrentLife + armor) - damage;
+        if (CurrentLife <= 0) {
+            CurrentLife = 0;
+        }
+    }
+}
+
+
