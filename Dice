@@ -1,0 +1,22 @@
+/**
+ * Dice is the one responsible for generating random number from 1-6.
+ */
+package Utility;
+
+import java.util.Random;
+
+public class Dice {
+
+    private Random r;
+
+    public Dice() {
+
+        r = new Random();
+    }
+
+    public int Roll() {
+
+        return r.nextInt(6) + 1;
+    }
+}
+
