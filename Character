@@ -1,0 +1,129 @@
+package Character;
+
+import Utility.Dice;
+ 
+/**
+ * Character class represents a character in a game/battle. It uses dice to determine a random number and
+ * it also entrust to instance variables such as name, strength, dexterity, and intelligence.
+ * 
+ */
+
+public abstract class Character {
+    
+    Dice dice = new Dice();
+
+    String name;
+    int strength;
+    int dexterity;
+    int intelligence;
+    int Attack;
+    int heal;
+    int damage;
+    int MaxLife;
+    int CurrentLife;
+    int armor;
+
+    public Character(String n, int a) {
+        this.name = n;
+        //this.strength = s;
+        //this.dexterity = d;
+        //this.intelligence = i;
+        this.armor = a;
+        this.MaxLife = dice.Roll() + 50;
+        this.CurrentLife = MaxLife;
+    }
+    /**
+     * 
+     * This returns the attack damage of a character which is a random number from 1-6 plus the character's strength.
+     * @return attack
+     */
+    public int attack() {
+
+        return dice.Roll() + strength;
+    }
+    /**
+     * 
+     * It is refers to the character's damage. The current life of the character will be subtracted depending on the damage/wound.
+     * If the current life is less than or equal to 0, then the current life will be 0. (it is to avoid a result of a negative value.)
+     * Next, if the damage is less than or equal to 0, then the damage will be zero.
+     * @param damage z
+     */
+    public void wound(int damage) {
+
+        CurrentLife = CurrentLife - damage;
+        if (CurrentLife <= 0) {
+            CurrentLife = 0;
+        }
+        if (damage <= 0) {
+            damage = 0;
+        }
+    }
+    /**
+     * The dice will be responsible for the random value for the heal.
+     * The heal will be added to the intelligence and added to the current life afterwards.
+     * If the current life is greater than the max life, then the current life will be just equal to the max life.
+     * (it is to avoid the current life to go beyond its max life.)
+     */
+    public void heal() {
+        heal = dice.Roll();
+        CurrentLife = CurrentLife + (heal + intelligence);
+        if (CurrentLife > MaxLife) {
+            CurrentLife = MaxLife;
+        }
+    }
+
+    public void setName(String n) {
+
+        this.name = n;
+    }
+
+    public void setStrength(int s) {
+
+        this.strength = s;
+    }
+
+    public void setDexterity(int d) {
+
+        this.dexterity = d;
+    }
+
+    public void setIntelligence(int i) {
+
+        this.intelligence = i;
+    }
+
+    public String getName() {
+
+        return name;
+    }
+
+    public int getStrength() {
+
+        return strength;
+    }
+
+    public int getDexterity() {
+
+        return dexterity;
+    }
+
+    public int getIntelligence() {
+
+        return intelligence;
+    }
+
+    public int getCurrentLife() {
+
+        return CurrentLife;
+    }
+
+    public int getMaxLife() {
+
+        return MaxLife;
+    }
+
+    public int getheal() {
+        return heal;
+    }
+
+}
