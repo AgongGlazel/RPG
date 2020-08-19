@@ -1,0 +1,12 @@
+/*
+ *
+ *This is the armor inferface.
+ */
+package Utility;
+
+
+interface Armor {
+
+    public abstract int useArmor();
+    
+}
